@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block container %}
+
+    <section class="main-content">
+  {% if cart|length > 0 %}
+				<div class="row">
+					<div class="span9">
+						<h4 class="title"><span class="text"><strong>Your</strong> Cart</span></h4>
+
+						<table class="table table-striped">
+							<thead>
+								<tr>
+
+									<th>Image</th>
+									<th>Product</th>
+									<th>Size</th>
+									<th>Color</th>
+									<th>Quantity</th>
+									<th>Price</th>
+									<th>Total</th>
+                                    <th>Remove</th>
+								</tr>
+							</thead>
+							<tbody>
+                            {% for item in cart %}
+                             {% with product=item.product %}
+
+                                <tr>
+
+                                        <td><a href="{{ product.get_absolute_url }}"><img style="height: 70%; width: 70%" alt="" src="{{ product.photo1.url }}"></a></td>
+                                        <td>{{ product.name }}</td>
+                                        <td>{{ item.product_size }}</td>
+                                        <td>{{ item.product_color }}</td>
+                                        <td>{{ item.quantity }}</td>
+
+                                        <td>${{ product.sale_price }}</td>
+                                        <td>${{ item.total_price }}</td>
+                                        <td>
+                                        <a href="{% url "cart:cart_remove" product.id %}">
+                                        <button type="button" class="btn btn-default btn-lg">
+                                          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> X
+                                        </button>
+                                        </a>
+
+                                        </td>
+
+
+
+                                  </tr>
+
+                             {% endwith %}
+                            {% endfor %}
+
+					</tbody>
+						</table>
+
+
+
+					<hr>
+						<p class="cart-total right">
+{#							<strong>Sub-Total</strong>:	$100.00<br>#}
+{#							<strong>Eco Tax (-2.00)</strong>: $2.00<br>#}
+{#							<strong>VAT (17.5%)</strong>: $17.50<br>#}
+							<strong>Total</strong>: ${{ cart.get_total_price|floatformat:"2" }}<br>
+						</p>
+						<hr/>
+						<p class="buttons center">
+
+{#                            <button class="btn buttons center" type="submit">Update</button>#}
+							<button class="btn" type="button"><a href="{% url "shop:products" %}" class="button light">Continue </a></button>
+							<button class="btn btn-inverse" type="submit" id="checkout"><a href="{% url "orders:order_create" %}" class="button">
+                            Checkout
+                            </a></button>
+						</p>
+					</div>
+					{% include "products/right_bar.html" %}
+				</div>
+
+    {% else %}
+      <div class="row">
+					<div class="span9">
+                    <h4 class="title"><span class="text"><strong>Your</strong> Cart is empty.</span></h4>
+      </div></div>
+                {% endif %}
+			</section>
+{% endblock %}

@@ -1,0 +1,194 @@
+{% extends "base.html" %}
+
+{% block container %}
+<div class="row">
+					<div class="span12">
+						<div class="accordion" id="accordion2">
+							<div class="accordion-group">
+{#								<div class="accordion-heading">#}
+{#									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">Checkout Options</a>#}
+{#								</div>#}
+{#								<div id="collapseOne" class="accordion-body in collapse">#}
+{#									<div class="accordion-inner">#}
+{#										<div class="row-fluid">#}
+{#											<div class="span6">#}
+{#												<h4>New Customer</h4>#}
+{#												<p>By creating an account you will be able to shop faster, be up to date on an order's status, and keep track of the orders you have previously made.</p>#}
+{#												<form action="#" method="post">#}
+{#													<fieldset>#}
+{#														<label class="radio" for="register">#}
+{#															<input type="radio" name="account" value="register" id="register" checked="checked">Register Account#}
+{#														</label>#}
+{#														<label class="radio" for="guest">#}
+{#															<input type="radio" name="account" value="guest" id="guest">Guest Checkout#}
+{#														</label>#}
+{#														<br>#}
+{#														<button class="btn btn-inverse" data-toggle="collapse" data-parent="#collapse2">Continue</button>#}
+{#													</fieldset>#}
+{#												</form>#}
+{#											 </div>#}
+{#											 <div class="span6">#}
+{#												<h4>Returning Customer</h4>#}
+{#												<p>I am a returning customer</p>#}
+{#												<form action="#" method="post">#}
+{#													<fieldset>#}
+{#														<div class="control-group">#}
+{#															<label class="control-label">Username</label>#}
+{#															<div class="controls">#}
+{#																<input type="text" placeholder="Enter your username" id="username" class="input-xlarge">#}
+{#															</div>#}
+{#														</div>#}
+{#														<div class="control-group">#}
+{#															<label class="control-label">Password</label>#}
+{#															<div class="controls">#}
+{#															<input type="password" placeholder="Enter your password" id="password" class="input-xlarge">#}
+{#															</div>#}
+{#														</div>#}
+{#														<button class="btn btn-inverse">Continue</button>#}
+{#													</fieldset>#}
+{#												</form>#}
+{#											</div>#}
+{#										</div>#}
+{#									</div>#}
+{#								</div>#}
+							</div>
+                            <form action="." method="post" class="order-form">
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">Account &amp; Billing Details</a>
+								</div>
+								<div id="collapseTwo" class="accordion-body collapse">
+									<div class="accordion-inner">
+
+
+										<div class="row-fluid">
+											<div class="span6">
+												<h4>Your Personal Details</h4>
+												<div class="control-group">
+													<label for="id_first_name" class="control-label"><span class="required">*</span>First Name</label>
+													<div class="controls">
+														<input id="id_first_name" name="first_name" type="text" placeholder="" class="input-xlarge">
+													</div>
+												</div>
+												<div class="control-group">
+													<label for="id_last_name" class="control-label"><span class="required">*</span>Last Name</label>
+													<div class="controls">
+														<input id="id_last_name" name="last_name" type="text" placeholder="" class="input-xlarge">
+													</div>
+												</div>
+												<div class="control-group">
+													<label class="control-label"><span class="required">*</span>Email Address</label>
+													<div class="controls">
+														<input type="email" name="email" placeholder="" class="input-xlarge">
+													</div>
+												</div>
+												<div class="control-group">
+													<label class="control-label"><span class="required">*</span>Telephone</label>
+													<div class="controls">
+														<input type="text" name="phone" placeholder="" class="input-xlarge">
+													</div>
+												</div>
+
+											</div>
+											<div class="span6">
+												<h4>Your Address</h4>
+
+
+												<div class="control-group">
+													<label class="control-label"><span class="required">*</span> Address :</label>
+													<div class="controls">
+														<input type="text" name="address" placeholder="" class="input-xlarge">
+													</div>
+												</div>
+
+												<div class="control-group">
+													<label class="control-label"><span class="required">*</span> City:</label>
+													<div class="controls">
+														<input type="text" name="city" placeholder="" class="input-xlarge">
+													</div>
+												</div>
+												<div class="control-group">
+													<label class="control-label"><span class="required">*</span> Post Code:</label>
+													<div class="controls">
+														<input type="text" name="postal_code" placeholder="" class="input-xlarge">
+													</div>
+												</div>
+{#												<div class="control-group">#}
+{#													<label class="control-label"><span class="required">*</span> Country:</label>#}
+{#													<div class="controls">#}
+{#														<input type="text" placeholder="" class="input-xlarge">#}
+{#													</div>#}
+{#												</div>#}
+
+											</div>
+										</div>
+
+
+									</div>
+								</div>
+							</div>
+							<div class="accordion-group">
+								<div class="accordion-heading">
+									<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">Confirm Order</a>
+								</div>
+								<div id="collapseThree" class="accordion-body collapse">
+									<div class="accordion-inner">
+										<div class="row-fluid">
+											<div class="control-group">
+												        <h3>Your order</h3>
+                                                        <ul>
+                                                            {% for item in cart %}
+                                                                <li>{{ item.quantity }}x {{ item.product.name }} <span>${{ item.total_price }}</span></li>
+                                                            {% endfor %}
+                                                        </ul>
+                                                        <p>Total: ${{ cart.get_total_price }}</p>
+											</div>
+											<input class="btn btn-inverse pull-right" type="submit" value="Place order">
+										</div>
+									</div>
+								</div>
+							</div>
+                            {% csrf_token %}
+                           </form>
+						</div>
+					</div>
+				</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{#    <div class="row">#}
+{#        <div class="span12">#}
+{#            <h1>Checkout</h1>#}
+{##}
+{#    <div class="order-info">#}
+{#        <h3>Your order</h3>#}
+{#        <ul>#}
+{#            {% for item in cart %}#}
+{#                <li>{{ item.quantity }}x {{ item.product.name }} <span>${{ item.total_price }}</span></li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+{#        <p>Total: ${{ cart.get_total_price }}</p>#}
+{#    </div>#}
+{##}
+{#    <form action="." method="post" class="order-form">#}
+{#        {{ form.as_p }}#}
+{#        <p><input type="submit" value="Place order"></p>#}
+{#        {% csrf_token %}#}
+{#    </form>#}
+{##}
+{# </div></div>#}
+{% endblock %}

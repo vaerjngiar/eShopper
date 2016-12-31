@@ -1,0 +1,226 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block jQuerry %}
+    <script>
+			$(function () {
+				$('#myTab a:first').tab('show');
+				$('#myTab a').click(function (e) {
+					e.preventDefault();
+					$(this).tab('show');
+				})
+			})
+			$(document).ready(function() {
+				$('.thumbnail').fancybox({
+					openEffect  : 'none',
+					closeEffect : 'none'
+				});
+
+				$('#myCarousel-2').carousel({
+                    interval: 2500
+                });
+			});
+		</script>
+{% endblock %}
+{% block container %}
+    <section class="main-content">
+				<div class="row">
+					<div class="span9">
+						<div class="row">
+							<div class="span4">
+								<a href="{{ object.photo1.url }}" class="thumbnail" data-fancybox-group="group1" title="{{ object.name }}"><img alt="" src="{{ object.photo1.url }}"></a>
+								<ul class="thumbnails small">
+                                    {% for product in object.images.all %}
+
+                                        <li class="span1">
+                                            <a href="{{ product.image.url }}" class="thumbnail" data-fancybox-group="group1" title="{{ product.name }}"><img src="{{ product.image.url }}" alt=""></a>
+                                        </li>
+                                    {% endfor %}
+{#									<li class="span1">#}
+{#										<a href="{% static 'images/ladies/3.jpg' %}" class="thumbnail" data-fancybox-group="group1" title="Description 3"><img src="{% static 'images/ladies/3.jpg' %}" alt=""></a>#}
+{#									</li>#}
+{#									<li class="span1">#}
+{#										<a href="{% static 'images/ladies/4.jpg' %}" class="thumbnail" data-fancybox-group="group1" title="Description 4"><img src="{% static 'images/ladies/4.jpg' %}" alt=""></a>#}
+{#									</li>#}
+{#									<li class="span1">#}
+{#										<a href="{% static 'images/ladies/5.jpg' %}" class="thumbnail" data-fancybox-group="group1" title="Description 5"><img src="{% static 'images/ladies/5.jpg' %}" alt=""></a>#}
+{#									</li>#}
+								</ul>
+							</div>
+							<div class="span5">
+								<address>
+
+									<strong>Brand:</strong> <span>{{ object.brand }}</span><br>
+
+									<strong>Product Code:</strong> <span>{{ object.code }}</span><br>
+{#									<strong>Reward Points:</strong> <span>0</span><br>#}
+                                    {% if object.active %}
+                                        <strong>Availability:</strong> <span>In Stock</span><br>
+                                    {% else %}
+                                        <strong>Availability:</strong> <span>Out Of Stock</span><br>
+                                    {% endif %}
+                                {% if object.clickevent.count %}
+                                    <p><strong>Hited: </strong><span>{{ object.clickevent.count }}</span></p>
+                                {% endif %}
+
+								</address>
+								<h4><strong>Price: ${{ object.price }}</strong></h4>
+							</div>
+							<div class="span5">
+								<form class="form-inline" method="post" action="{% url "cart:cart_add" object.id %}">
+
+									<label>Qty:</label>
+									<input type="number" class="span1" placeholder="-" name="quantity">
+                                    {% if object.colors.count > 0 %}
+                                    <label for="id_product_color">Color:</label>
+                                        <select name="product_color" id="id_product_color" class="span1">
+                                            {% for product in object.colors.all %}
+                                                <option value="{{ product.color }}">{{ product.color }}</option>
+                                            {% endfor %}
+                                    {% else %}
+                                        <input type="hidden" name='product_color' value='-' />
+                                    {% endif %}
+
+
+                                    </select>
+                                    <br><br>
+
+                                    {% if object.sizes.count > 0 %}
+                                    <label for="id_product_size">Size:</label>
+                                    <select name="product_size" id="id_product_size" class="span2">
+                                        {% for product in object.sizes.all %}
+                                            <option value="{{ product.size }}">{{ product.size }}</option>
+                                        
+                                        {% endfor %}
+                                    {% else %}
+                                       <input type="hidden" name='product_size' value='-' />
+                                    {% endif %}
+                                    </select>
+
+									<button class="btn btn-inverse" type="submit">Add to cart</button>
+                                {% csrf_token %}
+								</form>
+							</div>
+						</div>
+						<div class="row">
+							<div class="span9">
+								<ul class="nav nav-tabs" id="myTab">
+									<li class="active"><a href="#home">Description</a></li>
+									<li class=""><a href="#profile">Additional Information</a></li>
+								</ul>
+								<div class="tab-content">
+									<div class="tab-pane active" id="home">{{ object.description }}</div>
+									<div class="tab-pane" id="profile">
+										<table class="table table-striped shop_attributes">
+											<tbody>
+												<tr class="">
+													<th>Size</th>
+                                                <td>
+                                                        {% for product in object.sizes.all %}
+                                                           {{ product.size }} ;
+                                                        {% endfor %}
+                                                </td>
+{#													<td>Large, Medium, Small, X-Large</td>#}
+
+												</tr>
+												<tr class="alt">
+													<th>Colour</th>
+                                                    <td>
+                                                        {% for product in object.colors.all %}
+                                                           {{ product.color }} ;
+                                                        {% endfor %}
+                                                    </td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+							{% include "products/related_products.html" %}
+						</div>
+					</div>
+					{% include "products/right_bar.html" %}
+				</div>
+			</section>
+
+
+{############################}
+{#<h1>{{ object.name }}</h1>#}
+{#    {% if product.photo1 %}#}
+{#        <img src="{{ object.photo1.url }}" alt="{{ object.name }}">#}
+{#    {% endif %}#}
+{#    {% if product.photo2 %}#}
+{#        <img src="{{ object.photo2.url }}" alt="{{ object.name }}">#}
+{#    {% endif %}#}
+{##}
+{#    <p>manufacturer: {{ object.manufacturer }}</p>#}
+{#    <p>Description: {{ object.description }}</p>#}
+{#    <p>Price: ${{ object.price_in_dollars }}</p>#}
+{##}
+{#    {% for detail in object.details.all %}#}
+{#    {% if forloop.first %}<p>Additional details:</p>{% endif %}#}
+{#    <li>{{ detail.attribute.name }}: {{ detail.value }}</li>#}
+{#    {% endfor %}#}
+{#    <hr/>#}
+{#<p>Colors:</p>#}
+{#    {% for color in object.details.all %}#}
+{#        {% if color.attribute.name == 'Color' %}{{ color.value }}{% endif %}#}
+{##}
+{#    {% endfor %}#}
+{#<hr/>#}
+{##}
+{#<p>SIZES:</p>#}
+{#    {% for size in object.details.all %}#}
+{#        {% if size.attribute.name == 'SIZE' %}{{ size.value }}-{% endif %}#}
+{##}
+{#    {% endfor %}#}
+{##}
+{#    <hr/>#}
+{##}
+{#<p>New Colors:</p>#}
+{#    {% for product in object.colors.all %}#}
+{#     {{ object }} color :  {{ product.color }}-><br/>#}
+{##}
+{#    {% endfor %}#}
+{##}
+{##}
+{##}
+{#<p>New SIZES:</p>#}
+{#    {% for product in object.sizes.all %}#}
+{#       {{ object }} id:{{ object.id }} {{ product.size_id }}size:  {{ product.size }}-><br/>#}
+{##}
+{#    {% endfor %}#}
+{# <p>New IMAGES:</p>#}
+{#     {% for product in object.images.all %}#}
+{#       <img src="{{ product.image.url }}" alt="{{ product.name }}">#}
+{##}
+{#    {% endfor %}#}
+{##}
+{#      <p><a href="{% url 'shop:products' %}">Back to product list</a></p>#}
+{##}
+{#           <p class="price">${{ object.sale_price }}</p>#}
+{#        <form action="{% url "cart:cart_add" object.id %}" method="post">#}
+{##}
+{#            <label for="product_size"></label>#}
+{#            <select name="product_size" id="product_size" >#}
+{#                    {% for product in object.sizes.all %}#}
+{#                       <option value="{{ product.id }}">{{ product.size }}</option>#}
+{##}
+{#                    {% endfor %}#}
+{##}
+{##}
+{#            </select>#}
+{##}
+{#            {% csrf_token %}#}
+{#            <input type="submit" value="Add to cart">#}
+{#        </form>#}
+{#        {{ object.description|linebreaks }}#}
+{##}
+{#    <p>Apply SIZE</p>#}
+{#        <form action="{% url "cart:cart_add" object.id %}" method="post">#}
+{#        {{ size_apply_form }}#}
+{#        <input type="submit" value="Apply size">#}
+{#        {% csrf_token %}#}
+{#    </form>#}
+
+{% endblock %}

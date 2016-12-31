@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block container %}
+
+<section class="main-content">
+
+				<div class="row">
+					<div class="span9">
+						<ul class="thumbnails listing-products">
+                            {% for product in object_list %}
+
+                                <li class="span3">
+								<div class="product-box">
+									<span class="sale_tag"></span>
+									<a href="{{ product.get_absolute_url }}"><img   alt="" src="{{ product.photo1.url }}"></a><br/>
+									<a href="{{ product.get_absolute_url }}" class="title">{{ product.name }}</a><br/>
+									<a href="{{ product.get_absolute_url }}" class="category">{{ product.category }}</a>
+									<p class="price">${{ product.sale_price }}</p>
+								</div>
+							</li>
+
+							 {% endfor %}
+						</ul>
+						<hr>
+						<div class="pagination pagination-small pagination-centered">
+
+                                <ul>
+                                    <li><a href="{% url 'shop:products' %}?page=1">Prev</a></li>
+                                    {% for page in  pages %}
+                                    <li ><a href="{% url 'shop:products' %}?page={{ page }}">{{ page }}</a></li>
+                                    {% endfor %}
+
+                                    <li><a href="{% url 'shop:products' %}?page={{ page_obj.paginator.num_pages }}">Next</a></li>
+                                </ul>
+
+
+						</div>
+					</div>
+					{% include "products/right_bar.html" %}
+				</div>
+			</section>
+
+{% endblock %}
+
